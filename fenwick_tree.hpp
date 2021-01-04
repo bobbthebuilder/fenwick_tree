@@ -52,7 +52,7 @@ public:
         tree.assign(std::distance(begin, end), value_type{0});
         for (auto it{begin}; it != end; ++it)
         {
-            for (auto index{std::distance(begin, it)}; index < tree.size(); index = index | (index + 1))
+            for (auto index{std::distance(begin, it)}; index < size(); index = index | (index + 1))
             {
                 tree.at(index) += *it;
             }
@@ -61,21 +61,21 @@ public:
 
     value_type sum()
     {
-        if (tree.size() == 0)
+        if (size() == 0)
         {
             return 0;
         }
-        return sum(tree.size() - 1);
+        return sum(size() - 1);
     }
 
     value_type sum(signed_type i)
     {
-        if (i < 0 || i >= tree.size())
+        if (i < 0 || i >= size())
         {
             throw std::out_of_range("sum(0, " + std::to_string(i) + ") exceeds range.");
         }
         value_type result{0};
-        if (tree.size() == 0)
+        if (size() == 0)
         {
             return result;
         }
@@ -104,20 +104,20 @@ public:
 
     bool update(signed_type i, const value_type& value)
     {
-        if (i < 0 || i >= tree.size())
+        if (i < 0 || i >= size())
         {
             return false;
         }
-        for (; i < tree.size(); i += i & -i)
+        for (; i <= size(); i += i & -i)
         {
             tree[i] += value;
         }
         return true;
     }
 
-    size_type size() const noexcept
+    signed_type size() const noexcept
     {
-        return tree.size();
+        return std::distance(tree.begin(), tree.end());
     }
 
     void clear() noexcept
