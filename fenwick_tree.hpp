@@ -38,15 +38,17 @@ public:
 
     fenwick_tree() = default;
 
-    template <class InputIterator, class = std::enable_if_t<std::is_convertible_v<typename std::iterator_traits<InputIterator>::value_type, value_type>>>
+    template <class InputIterator>
     explicit fenwick_tree(InputIterator begin, InputIterator end)
     {
         construct(begin, end);
     }
 
-    template <class InputIterator, class = std::enable_if_t<std::is_convertible_v<typename std::iterator_traits<InputIterator>::value_type, value_type>>>
+    template <class InputIterator>
     void construct(InputIterator begin, InputIterator end)
     {
+        static_assert(std::is_convertible_v<typename std::iterator_traits<InputIterator>::value_type, value_type>, "");
+
         tree.assign(std::distance(begin, end), value_type{0});
         for (auto it{begin}; it != end; ++it)
         {
