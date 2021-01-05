@@ -3,7 +3,7 @@
 
 // MIT License
 //
-// Copyright (c) 2020 Daniel Feist
+// Copyright (c) 2021 Daniel Feist
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ public:
     template <class InputIterator>
     void construct(InputIterator begin, InputIterator end)
     {
-        static_assert(std::is_convertible_v<typename std::iterator_traits<InputIterator>::value_type, value_type>, "");
+        static_assert(std::is_convertible_v<typename std::iterator_traits<InputIterator>::value_type, value_type>, "value type of InputIterator is not implicitly convertible to T.");
 
         tree.assign(std::distance(begin, end), value_type{0});
         for (auto it{begin}; it != end; ++it)
@@ -102,13 +102,22 @@ public:
         return upper - lower;
     }
 
-    bool update(signed_type i, const value_type& value)
+    bool update(signed_type i, signed_type j, const value_type& value)
     {
-        if (i < 0 || i >= size())
+        if (i > j)
+        {
+            throw std::out_of_range("update(" + std::to_string(i) + ", " + std::to_string(j) + ") has a negative range.");
+        }
+        ++j;
+        if (i < 0 || j < 0 || i >= size() || j >= size())
         {
             return false;
         }
-        for (; i <= size(); i += i & -i)
+        for (; j <= size(); j += j & (-j))
+        {
+            tree[j] += -value;
+        }
+        for (; i <= size(); i += i & (-i))
         {
             tree[i] += value;
         }
