@@ -1,9 +1,3 @@
-# fenwick tree implementation in C++
-
-Single header C++ implementation of a fenwick tree (binary indexed tree) to update elements in
-and calculate prefix sums of an array efficiently, i.e. in logarithmic time.
-
-```cpp
 #include "../fenwick_tree.hpp"
 
 #include <vector>
@@ -19,7 +13,6 @@ int main()
     t.update(3, 3, -1); // equals array[3] += -1
     std::cout << "sum(3, 4)=" << t.sum(3, 4) << "\n"; // 3 + 3 = 6
 
-    return 0;
+    std::cout << t << "\n";
+    return 0;	
 }
-```
-Compile with: g++ -o example -std=c++17 example.cpp
